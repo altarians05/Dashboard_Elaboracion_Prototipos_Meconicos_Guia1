@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4: Contextualización</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ESTILOS GLOBALES ESTANDARIZADOS */
+        :root { 
+            --sena-green: #39A900; 
+            --sena-blue: #00324D; 
+            --sena-orange: #FF6C00; 
+            --bg-body: #F4F6F9; 
+            --bg-card: #FFFFFF; 
+            --text-gray: #59667a; 
+            --shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            --radius: 12px; 
+            --menu-width: 290px; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-body); color: var(--sena-blue); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* HEADER MEJORADO */
+        header { 
+            background-color: var(--bg-card); 
+            padding: 0.8rem 2rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            z-index: 100; 
+            position: sticky; 
+            top: 0; 
+        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { text-decoration: none; color: var(--sena-blue); font-weight: bold; display: flex; align-items: center; gap: 10px; transition: color 0.3s; font-size: 0.9rem; }
+        .back-btn:hover { color: var(--sena-orange); }
+        
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--sena-blue);
+            font-size: 1.0rem;
+            letter-spacing: 1.7px;
+            text-align: center;
+            flex-grow: 1;
+        }
+        @media(max-width: 768px) { .header-title { display: none; } }
+
+        /* LAYOUT */
+        .main-layout { display: flex; flex: 1; max-width: 1400px; margin: 2rem auto; gap: 2rem; width: 100%; padding: 0 20px; }
+        
+        /* SIDEBAR CON PINES */
+        .sidebar { width: var(--menu-width); background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; height: fit-content; position: sticky; top: 6rem; }
+        .sidebar h3 { font-family: 'Montserrat'; color: var(--sena-green); margin-bottom: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.1rem; }
+        
+        .menu-item { 
+            display: flex; align-items: center; gap: 12px; padding: 12px 15px; margin-bottom: 8px; 
+            border-radius: 8px; cursor: pointer; transition: all 0.3s; color: var(--text-gray); 
+            font-weight: 500; position: relative; font-size: 0.9rem; border: 1px solid transparent;
+        }
+        .menu-item img { width: 28px; height: auto; transition: 0.3s; }
+        .menu-item:hover { background: #f0fdf4; color: var(--sena-green); border-color: #d1fae5; }
+        .menu-item.active { background: var(--sena-green); color: white; box-shadow: 0 4px 10px rgba(57, 169, 0, 0.3); }
+        .menu-item.completed::after { content: '\f00c'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; right: 10px; color: var(--sena-green); }
+        .menu-item.active.completed::after { color: white; }
+
+        /* PROGRESO SIDEBAR */
+        .progress-sidebar { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
+        .progress-label { font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; display: block; color: var(--sena-blue); }
+        .progress-bg { background: #e0e0e0; height: 10px; border-radius: 10px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, var(--sena-green), var(--sena-orange)); height: 100%; width: 0%; transition: width 0.6s ease; }
+
+        /* CONTENIDO */
+        .content-area { flex: 1; background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 3rem; min-height: 600px; }
+        .activity-section { display: none; animation: fadeIn 0.5s ease; }
+        .activity-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-header h2 { font-family: 'Montserrat'; color: var(--sena-blue); font-size: 1.8rem; margin-bottom: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        .section-header i { color: var(--sena-orange); }
+
+        /* COMPONENTES ESPECÍFICOS */
+        .narrative-box { display: flex; gap: 20px; background: #e3f2fd; padding: 25px; border-radius: 20px; border-left: 6px solid var(--sena-blue); align-items: center; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .narrative-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .narrative-text { font-size: 1rem; color: #333; }
+
+        .btn-primary { background: var(--sena-orange); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 1rem; box-shadow: 0 4px 0 #d35400; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #d35400; background: #ff7b1a; }
+        .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #d35400; }
+
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin: 2rem 0; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* TABS BIOSEGURIDAD */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn { padding: 10px 20px; border: 2px solid #eee; background: white; border-radius: 30px; cursor: pointer; font-weight: bold; color: var(--text-gray); transition: 0.3s; }
+        .tab-btn.active { background: var(--sena-blue); color: white; border-color: var(--sena-blue); }
+        .tab-content { display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .tab-content.active { display: grid; }
+
+        .safety-card { background: white; border: 1px solid #eee; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; position: relative; overflow: hidden; }
+        .safety-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .safety-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+        .safety-danger .safety-icon { color: #d32f2f; }
+        .safety-prohibit .safety-icon { color: #f57c00; }
+        .safety-oblig .safety-icon { color: #1976d2; }
+
+        /* RECOMENDACIONES DE USO */
+        .usage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .usage-item { background: #f8f9fa; padding: 20px; border-radius: 10px; display: flex; align-items: flex-start; gap: 15px; transition: 0.3s; }
+        .usage-item:hover { background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .usage-icon { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--sena-green); font-size: 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0; }
+
+        /* RETO PRINCIPAL */
+        .challenge-box { background: #fff3e0; border: 2px dashed var(--sena-orange); border-radius: 15px; padding: 30px; margin-top: 20px; text-align: center; }
+        .reflection-input { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px; margin-top: 15px; font-family: inherit; resize: vertical; min-height: 100px; transition: 0.3s; }
+        .reflection-input:focus { border-color: var(--sena-blue); outline: none; }
+
+        /* SOPA DE LETRAS */
+        #wordSearchGrid {
+    display: grid;
+    grid-template-columns: repeat(10, 35px); /* 10 columnas fijas */
+    gap: 5px;
+    justify-content: center;
+    margin: 20px auto;
+    user-select: none; /* Evita que se resalte el texto al hacer clic rápido */
+}
+        .ws-cell { width: 30px; height: 30px; background: #eee; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .ws-cell:hover { background: #ddd; }
+        .ws-cell.selected { background: var(--sena-orange); color: white; transform: scale(1.1); }
+        .ws-cell.found { background: var(--sena-green); color: white; animation: popIn 0.3s; }
+        .word-list { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .word-tag { background: #e3f2fd; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; color: var(--sena-blue); }
+        .word-tag.found { background: var(--sena-green); color: white; text-decoration: line-through; opacity: 0.7; }
+
+        /* OVERLAY FINAL */
+        #congratsOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,50,77,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; text-align: center; color: white; }
+        .badge-final { width: 250px; animation: badgePop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-bottom: 20px; filter: drop-shadow(0 0 30px rgba(255,215,0,0.6)); }
+        @keyframes badgePop { from { transform: scale(0) rotate(-180deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .main-layout { flex-direction: column; }
+            .sidebar { width: 100%; position: static; }
+            .presentation-content { grid-template-columns: 1fr; }
+            .narrative-box { flex-direction: column; text-align: center; }
+            #wordSearchGrid { grid-template-columns: repeat(12, 22px); gap: 2px; }
+            .ws-cell { width: 22px; height: 22px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="imagenes/Logos/sena.png" alt="SENA" style="height: 50px;">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Centro de Comando</a>
+        </div>
+        <div class="header-title">MÓDULO 4: CONTEXTUALIZACIÓN</div>
+        <img src="imagenes/Logos/tecnoacademia.jpeg" alt="TecnoAcademia" style="height: 50px;">
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <h3><i class="fas fa-route"></i> Ruta de Aprendizaje</h3>
+            
+            <div id="menu-1" class="menu-item active" onclick="showSection(1)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_S.png" alt="S"> 1. Ficha de Misión
+            </div>
+            <div id="menu-2" class="menu-item" onclick="showSection(2)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_T.png" alt="T"> 2. Intro al Diseño
+            </div>
+            <div id="menu-3" class="menu-item" onclick="showSection(3)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_E.png" alt="E"> 3. Descripción y Video
+            </div>
+            <div id="menu-4" class="menu-item" onclick="showSection(4)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_A.png" alt="A"> 4. Bioseguridad
+            </div>
+            <div id="menu-5" class="menu-item" onclick="showSection(5)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_M.png" alt="M"> 5. Recomendaciones
+            </div>
+            <div id="menu-6" class="menu-item" onclick="showSection(6)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_S.png" alt="S"> 6. Reto Maker
+            </div>
+            <div id="menu-7" class="menu-item" onclick="showSection(7)">
+                <img src="imagenes/Insignias/Pin STEAM+/Pin_T.png" alt="T"> 7. Sopa de Letras
+            </div>
+
+            <div class="progress-sidebar">
+                <span class="progress-label">Progreso del Módulo: <span id="progress-text">0%</span></span>
+                <div class="progress-bg">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            
+            <section id="sec-1" class="activity-section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-flag"></i> Inicio de Misión</h2>
+                </div>
+                
+                <div class="narrative-box">
+                    <img src="imagenes/Personajes/tecnoBot/para talleres_Mesa de trabajo 1.png" alt="TecnoBot" class="narrative-avatar" style="animation: float 3s infinite ease-in-out;">
+                    <div class="narrative-text">
+                        <strong>TecnoBot dice:</strong><br>
+                        "¡Bienvenido Maker! En este nivel analizaremos el 'Diseño Mecánico'. No es solo dibujar, es planear cómo funcionará el futuro. ¿Estás listo para entender las reglas del juego?"
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 4px solid var(--sena-orange); box-shadow: var(--shadow);">
+    <h4 style="color: var(--sena-blue); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-clipboard-list"></i> Ficha Técnica de la Misión
+    </h4>
+    <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 12px;">
+            <i class="fas fa-tools" style="color: var(--sena-green); width: 20px;"></i> 
+            <strong>Actividad:</strong> Haz parte del diseño mecánico: De la idea al plano.
+        </li>
+        <li style="margin-bottom: 12px;">
+            <i class="fas fa-bullseye" style="color: var(--sena-green); width: 20px;"></i> 
+            <strong>Objetivo:</strong> Identificar los fundamentos del diseño mecánico y su importancia en la creación de prototipos funcionales.
+        </li>
+        <li style="margin-bottom: 12px;">
+            <i class="fas fa-users" style="color: var(--sena-green); width: 20px;"></i> 
+            <strong>Metodología:</strong> Aprendizaje basado en retos (ABR) y construcción de Mapa Conceptual.
+        </li>
+        <li style="margin-bottom: 12px;">
+            <i class="fas fa-file-export" style="color: var(--sena-green); width: 20px;"></i> 
+            <strong>Entregable:</strong> Estructura mental de diseño y reporte de bioseguridad aplicado.
+        </li>
+        <li style="margin-bottom: 12px;">
+            <i class="fas fa-clock" style="color: var(--sena-green); width: 20px;"></i> 
+            <strong>Duración estimada:</strong> 4 Horas de inmersión total.
+        </li>
+        <li>
+            <i class="fas fa-layer-group" style="color: var(--sena-green); width: 20px;"></i> 
+            <strong>Formato:</strong> Trabajo colaborativo en Triadas Maker.
+        </li>
+    </ul>
+</div>
+                    <div style="text-align: center; background: #e8f5e9; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <img src="imagenes/Personajes/TecnoBot/Anexo_TecnoAcademia.png" style="width: 80px; margin-bottom: 10px;">
+                        <p style="font-size: 0.9rem; margin-bottom: 15px;">Descarga la guía oficial para empezar.</p>
+                        <a href="documentos/Anexos/Anexo_G1_Taller1_Haz parte del diseño mecánico.pdf" target="_blank" class="btn-primary" style="background: var(--sena-blue); box-shadow: 0 4px 0 #00263a;">
+                            <i class="fas fa-file-pdf"></i> Descargar Anexo
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="text-align: right; margin-top: 30px;">
+                    <button class="btn-primary" onclick="completeStep(1, 2)">Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </section>
+
+            <section id="sec-2" class="activity-section">
+                <div class="section-header">
+    <h2><i class="fas fa-lightbulb"></i> Introducción al Diseño Mecánico</h2>
+</div>
+<p>El diseño mecánico es una disciplina creativa y técnica que transforma necesidades en soluciones físicas tangibles. No se trata solo de estética; es la aplicación de principios científicos y matemáticos para crear máquinas que mejoren la calidad de vida.</p>
+
+<div class="usage-grid" style="margin-top: 25px;">
+    <div class="usage-item" style="border-top: 3px solid var(--sena-orange);">
+        <div class="usage-icon"><i class="fas fa-pencil-ruler"></i></div>
+        <div>
+            <h4>Ideación y Creación</h4>
+            <p>Es la fase donde nacen los conceptos. Se utilizan bocetos a mano alzada y lluvia de ideas para definir la forma y la función, considerando siempre el usuario final.</p>
+        </div>
+    </div>
+    
+    <div class="usage-item" style="border-top: 3px solid var(--sena-blue);">
+        <div class="usage-icon"><i class="fas fa-microchip"></i></div>
+        <div>
+            <h4>Análisis y Simulación</h4>
+            <p>Antes de fabricar, validamos. Se seleccionan materiales según su resistencia, peso y costo, y se realizan cálculos de fuerzas para asegurar que nada falle.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-top: 3px solid var(--sena-green);">
+        <div class="usage-icon"><i class="fas fa-file-signature"></i></div>
+        <div>
+            <h4>Planos y Estándares</h4>
+            <p>Traducción de la idea a un lenguaje técnico universal. Creación de planos con tolerancias, medidas exactas y normas técnicas para que cualquier taller pueda entenderlo.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-top: 3px solid #FFD700;">
+        <div class="usage-icon"><i class="fas fa-industry"></i></div>
+        <div>
+            <h4>Manufactura Maker</h4>
+            <p>El paso final donde el diseño cobra vida mediante impresión 3D, corte láser o mecanizado, integrando ensambles y mecanismos funcionales.</p>
+        </div>
+    </div>
+</div>
+
+
+
+<div style="background: #f0fdf4; padding: 20px; border-radius: 12px; margin-top: 25px; border-left: 5px solid var(--sena-green);">
+    <p style="font-size: 0.95rem; color: #1e40af;"><strong>Nota del Experto:</strong> El diseño mecánico es un proceso iterativo. A menudo tendrás que volver al dibujo si la simulación o el prototipo muestran que algo puede mejorar. ¡Equivocarse es parte del diseño!</p>
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+    <button class="btn-primary" onclick="completeStep(2, 3)">Entendido, ¡Avanzar!</button>
+</div>
+            </section>
+
+            <section id="sec-3" class="activity-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-video"></i> Contexto Industrial</h2>
+                </div>
+
+                <div class="narrative-box" style="background: #fff3e0; border-color: var(--sena-orange);">
+                    <img src="imagenes/Personajes/Maker/Facilitador-Electronica2.png" alt="Facilitador" class="narrative-avatar">
+                    <div class="narrative-text">
+                        <strong>Facilitador Maker dice:</strong><br>
+                        "¿Alguna vez te has preguntado cómo se diseñan los motores, los robots o incluso tu bicicleta? Observa este video para entender el verdadero alcance del diseño mecánico en el mundo moderno."
+                    </div>
+                </div>
+
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/S6XclWQNRtw" title="Diseño Mecánico" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+                <div class="challenge-box" style="background: white; border: 1px solid #ddd; margin-top: 30px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <img src="imagenes/Personajes/TecnoBot/tecnobot rostro_Mesa de trabajo 1.png" style="width: 60px;">
+                        <h4 style="text-align: left; margin: 0; color: var(--sena-blue);">Reflexión Rápida</h4>
+                    </div>
+                    <p style="text-align: left;">Ahora que viste el video, cuéntanos: <strong>¿Por qué crees que el diseño mecánico es importante en la industria y el mundo?</strong></p>
+                    <textarea class="reflection-input" id="reflexion1" placeholder="Escribe tu opinión aquí..."></textarea>
+                    <button class="btn-primary" style="margin-top: 15px;" onclick="saveReflection(1)">Enviar Respuesta</button>
+                </div>
+            </section>
+
+            <section id="sec-4" class="activity-section">
+               <div class="section-header">
+    <h2><i class="fas fa-shield-alt"></i> Seguridad y Bioseguridad en el Taller</h2>
+</div>
+<p style="margin-bottom: 20px;">Un Maker profesional entiende que la seguridad es la base de la innovación. El cumplimiento estricto de estas normas previene accidentes y garantiza un entorno de trabajo eficiente. Navega por las categorías para conocer tus responsabilidades:</p>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="openTab('danger')">⚠️ Peligros (Rojo)</button>
+    <button class="tab-btn" onclick="openTab('prohibit')">🚫 Prohibiciones (Naranja)</button>
+    <button class="tab-btn" onclick="openTab('oblig')">🔵 Obligaciones (Azul)</button>
+</div>
+
+<div id="danger" class="tab-content active">
+    <div class="safety-card safety-danger">
+        <i class="fas fa-bolt safety-icon"></i>
+        <h4>Riesgo Eléctrico</h4>
+        <p>Alta tensión en maquinaria y circuitos. Nunca manipules cables expuestos o equipos con las manos húmedas.</p>
+    </div>
+    <div class="safety-card safety-danger">
+        <i class="fas fa-temperature-high safety-icon"></i>
+        <h4>Riesgo Térmico</h4>
+        <p>Cuidado con cautines, boquillas de impresión 3D y cortadoras. Pueden alcanzar temperaturas superiores a 200°C.</p>
+    </div>
+    <div class="safety-card safety-danger">
+        <i class="fas fa-biohazard safety-icon"></i>
+        <h4>Sustancias Químicas</h4>
+        <p>Resinas, alcohol isopropílico y solventes. Su inhalación o contacto directo puede causar irritaciones severas.</p>
+    </div>
+    <div class="safety-card safety-danger">
+        <i class="fas fa-cut safety-icon"></i>
+        <h4>Elementos Afilados</h4>
+        <p>Bisturís y herramientas de corte. Siempre corta en dirección opuesta a tu cuerpo.</p>
+    </div>
+</div>
+
+<div id="prohibit" class="tab-content">
+    <div class="safety-card safety-prohibit">
+        <i class="fas fa-hamburger safety-icon"></i>
+        <h4>Sin Alimentos</h4>
+        <p>Prohibido ingerir comida o bebidas. Evita la contaminación de tus proyectos y el riesgo de ingesta accidental de residuos.</p>
+    </div>
+    <div class="safety-card safety-prohibit">
+        <i class="fas fa-user-lock safety-icon"></i>
+        <h4>Uso no Autorizado</h4>
+        <p>Prohibido operar maquinaria pesada o láser sin la supervisión directa de un facilitador o instructor.</p>
+    </div>
+    <div class="safety-card safety-prohibit">
+        <i class="fas fa-running safety-icon"></i>
+        <h4>Movimientos Bruscos</h4>
+        <p>Prohibido correr o realizar juegos en el área de trabajo. Un tropiezo puede causar daños irreparables.</p>
+    </div>
+</div>
+
+<div id="oblig" class="tab-content">
+    <div class="safety-card safety-oblig">
+        <i class="fas fa-glasses safety-icon"></i>
+        <h4>Protección Visual</h4>
+        <p>Uso obligatorio de gafas de seguridad para evitar proyecciones de partículas durante el mecanizado.</p>
+    </div>
+    <div class="safety-card safety-oblig">
+        <i class="fas fa-head-side-mask safety-icon"></i>
+        <h4>Protección Respiratoria</h4>
+        <p>Uso de tapabocas o respiradores en áreas de soldadura, pintura o corte de materiales que generen polvo fino.</p>
+    </div>
+    <div class="safety-card safety-oblig">
+        <i class="fas fa-ear-listen safety-icon"></i>
+        <h4>Protección Auditiva</h4>
+        <p>Obligatorio en zonas de alta emisión de ruido por maquinaria de potencia o herramientas neumáticas.</p>
+    </div>
+    <div class="safety-card safety-oblig">
+        <i class="fas fa-broom safety-icon"></i>
+        <h4>Orden y Limpieza</h4>
+        <p>Cada Maker es responsable de dejar su estación impecable al finalizar. Las herramientas deben volver a su sitio.</p>
+    </div>
+</div>
+
+
+
+<div style="text-align: center; margin-top: 30px;">
+    <button class="btn-primary" onclick="completeStep(4, 5)">He comprendido las normas de seguridad</button>
+</div>
+            </section>
+
+            <section id="sec-5" class="activity-section">
+                <div class="section-header">
+    <h2><i class="fas fa-check-double"></i> Normas de Convivencia y Uso Responsable</h2>
+</div>
+<p style="margin-bottom: 25px;">El éxito de un proyecto Maker no solo depende de la técnica, sino del respeto por el entorno y los compañeros. Estas recomendaciones garantizan la sostenibilidad de nuestra TecnoAcademia:</p>
+
+<div class="usage-grid">
+    <div class="usage-item" style="border-right: 3px solid var(--sena-blue);">
+        <div class="usage-icon"><i class="fas fa-laptop"></i></div>
+        <div>
+            <h4>Equipos y Software</h4>
+            <p>Hacer uso adecuado de los materiales y equipos de cómputo. Evita instalar software no autorizado y reporta cualquier fallo técnico de inmediato al facilitador.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-right: 3px solid var(--sena-orange);">
+        <div class="usage-icon"><i class="fas fa-chair"></i></div>
+        <div>
+            <h4>Salud y Ergonomía</h4>
+            <p>Mantén una postura adecuada frente al computador y en el banco de trabajo. La espalda recta y los pies apoyados previenen lesiones a largo plazo.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-right: 3px solid var(--sena-green);">
+        <div class="usage-icon"><i class="fas fa-eye"></i></div>
+        <div>
+            <h4>Pausas Activas Visuales</h4>
+            <p>Aplica la regla 20-20-20: cada 20 minutos mira algo a 20 pies de distancia por 20 segundos para evitar la fatiga visual por pantallas.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-right: 3px solid #d32f2f;">
+        <div class="usage-icon"><i class="fas fa-user-injured"></i></div>
+        <div>
+            <h4>Prevención en Movimiento</h4>
+            <p>Prohibido correr o realizar movimientos bruscos. El taller es un área de precisión; un tropiezo puede dañar un prototipo o lastimar a alguien.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-right: 3px solid #1976d2;">
+        <div class="usage-icon"><i class="fas fa-recycle"></i></div>
+        <div>
+            <h4>Residuos y Sostenibilidad</h4>
+            <p>Clasifica los desechos: retal de material (madera/acrílico), componentes electrónicos y residuos generales en sus respectivos contenedores.</p>
+        </div>
+    </div>
+
+    <div class="usage-item" style="border-right: 3px solid #fbc02d;">
+        <div class="usage-icon"><i class="fas fa-broom"></i></div>
+        <div>
+            <h4>Protocolo de Cierre</h4>
+            <p>Organizar el espacio 10 minutos antes de terminar. Las herramientas deben limpiarse y guardarse en su sitio asignado; nada queda sobre las mesas.</p>
+        </div>
+    </div>
+</div>
+
+<div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-top: 25px; display: flex; align-items: center; gap: 15px;">
+    <i class="fas fa-info-circle" style="font-size: 2rem; color: var(--sena-blue);"></i>
+    <p style="margin: 0; font-size: 0.95rem;"><strong>Recuerda:</strong> El respeto por las herramientas de la TecnoAcademia asegura que otros Makers puedan seguir creando el futuro al igual que tú.</p>
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+    <button class="btn-primary" onclick="completeStep(5, 6)">Acepto los términos y voy al Reto</button>
+</div>
+            </section>
+
+            <section id="sec-6" class="activity-section">
+               <div class="section-header">
+    <h2><i class="fas fa-users-cog"></i> Reto: Diseño Colectivo</h2>
+</div>
+
+<div class="challenge-box" style="text-align: left; border: 2px solid var(--sena-orange); background: #fffcf9;">
+    <h3 style="color: var(--sena-orange); margin-bottom: 15px; text-align: center; font-family: 'Montserrat';">
+        <i class="fas fa-rocket"></i> ¡Misión: Triadas de Innovación!
+    </h3>
+    <p>Hola, Maker. Para consolidar tus conocimientos y subir de nivel, deberás trabajar en equipo. El diseño mecánico nunca es un esfuerzo solitario, siempre requiere de la retroalimentación de otros.</p>
+    
+    <h4 style="color: var(--sena-blue); margin-top: 20px;"><i class="fas fa-list-check"></i> Instrucciones del Reto:</h4>
+    <ol style="margin-left: 20px; margin-top: 10px;">
+        <li style="margin-bottom: 8px;"><strong>Conformación:</strong> Reúnete con 2 compañeros para formar una "Triada Maker".</li>
+        <li style="margin-bottom: 8px;"><strong>Investigación Rápida:</strong> Utilicen lo aprendido en los videos y lecturas anteriores para definir su visión del diseño mecánico.</li>
+        <li style="margin-bottom: 8px;"><strong>Creación del Mapa Mental:</strong> En un pliego de papel o cartelera, ubiquen el concepto central y ramifiquen respondiendo:
+            <ul style="margin-left: 20px; list-style-type: circle;">
+                <li>¿Qué es el diseño mecánico en sus propias palabras?</li>
+                <li>¿Qué problemas del mundo real puede resolver?</li>
+                <li>¿Qué herramientas (software o hardware) son esenciales?</li>
+            </ul>
+        </li>
+        <li><strong>Pitch Maker:</strong> Preparen una explicación de 2 minutos para el resto del grupo.</li>
+    </ol>
+
+    <div style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+        <p style="margin: 0; font-size: 0.9rem;"><strong><i class="fas fa-toolbox"></i> Kit de Materiales:</strong> Pliego de papel periódico o bond, marcadores de colores, post-its y mucha creatividad.</p>
+    </div>
+</div>
+
+<div style="margin-top: 35px;">
+    <h4 style="color: var(--sena-blue);"><i class="fas fa-pen-fancy"></i> Evidencia y Reflexión Final:</h4>
+    <p>Tras completar el mapa mental y escuchar a tus compañeros, responde con criterio técnico:</p>
+    <p><strong>¿Cómo crees que el diseño mecánico impacta la sostenibilidad y el desarrollo tecnológico de tu región?</strong></p>
+    <textarea class="reflection-input" id="reflexion2" placeholder="Escribe aquí tu conclusión técnica analizando el impacto regional..."></textarea>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <p style="font-size: 0.85rem; color: var(--text-gray); font-style: italic;">*Asegúrate de haber guardado tu respuesta antes de avanzar al juego final.</p>
+        <button class="btn-primary" onclick="saveReflection(2)">
+            <i class="fas fa-save"></i> Guardar Actividad y Continuar
+        </button>
+    </div>
+</div>
+            </section>
+
+            <section id="sec-7" class="activity-section">
+               <div class="section-header">
+    <h2><i class="fas fa-gamepad"></i> Sopa de Letras: Vocabulario de Diseño</h2>
+</div>
+
+<div class="narrative-box" style="margin-bottom: 20px;">
+    <img src="imagenes/Personajes/tecnoBot/para talleres_Mesa de trabajo 1.png" alt="TecnoBot" class="narrative-avatar" style="width: 70px; height: 70px;">
+    <div class="narrative-text" style="font-size: 0.9rem;">
+        <strong>TecnoBot dice:</strong> "¡Última prueba, Maker! Encuentra los términos que definen nuestra labor. Al seleccionarlos, recordarás los pilares que vimos hoy: desde la <strong>Mecánica</strong> pura hasta el escalado en la <strong>Industria</strong>."
+    </div>
+</div>
+
+<div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 25px; font-size: 0.9rem; border-left: 4px solid var(--sena-green);">
+    <p><strong>Desafío Cognitivo:</strong> Encuentra las 5 palabras clave ocultas. Estos conceptos representan las etapas de vida de un producto mecánico, desde que es un boceto en los <strong>Planos</strong> hasta que se convierte en un <strong>Prototipo</strong> funcional.</p>
+</div>
+
+<div class="word-list" id="wordList">
+    </div>
+
+<div id="wordSearchGrid">
+    </div>
+
+<div id="finalBtnArea" style="text-align: center; margin-top: 30px; display: none; animation: fadeIn 0.8s ease;">
+    <div style="background: #e8f5e9; padding: 20px; border-radius: 15px; border: 2px solid var(--sena-green); margin-bottom: 20px;">
+        <h3 style="color: var(--sena-green); margin-bottom: 10px;"><i class="fas fa-check-circle"></i> ¡Misión Cumplida!</h3>
+        <p>Has demostrado dominio sobre el lenguaje técnico del diseño mecánico. Ahora tienes las bases para transformar tus ideas en planos reales.</p>
+    </div>
+    <button class="btn-primary" onclick="finishModule()" style="padding: 15px 40px; font-size: 1.1rem;">
+        <i class="fas fa-medal"></i> FINALIZAR ACTIVIDAD Y RECLAMAR INSIGNIA
+    </button>
+</div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="congratsOverlay">
+        <h1 style="font-family: 'Montserrat'; font-size: 3rem; margin-bottom: 20px; text-transform: uppercase; color: #FFD700; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">¡FELICITACIONES!</h1>
+        <img src="imagenes/Insignias/Insignias Mohs/02 - Insignias MOHS-Oro.png" alt="Insignia Oro" class="badge-final">
+        <h2 style="font-family: 'Montserrat';">Has desbloqueado la Insignia de Oro</h2>
+        <p style="font-size: 1.2rem; max-width: 600px;">Tu compromiso con la contextualización te convierte en un experto en normas y diseño.</p>
+        
+        <button onclick="window.location.href='index.html'" style="margin-top: 30px; background: white; color: var(--sena-blue); padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+            <i class="fas fa-home"></i> Volver al Centro de Comando
+        </button>
+    </div>
+
+    <script>
+        // ESTADO DEL PROGRESO
+        let currentProgress = 0;
+        const totalSteps = 7;
+        const visitedSteps = new Set([1]);
+
+        function completeStep(current, next) {
+            visitedSteps.add(next);
+            updateProgress();
+            
+            // Marcar menú actual como completado
+            document.getElementById(`menu-${current}`).classList.add('completed');
+            
+            // Ir a siguiente sección
+            showSection(next);
+        }
+
+        function showSection(id) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.activity-section').forEach(sec => sec.classList.remove('active'));
+            // Mostrar la seleccionada
+            document.getElementById(`sec-${id}`).classList.add('active');
+            
+            // Actualizar menú lateral
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            document.getElementById(`menu-${id}`).classList.add('active');
+            
+            // Scroll arriba
+            window.scrollTo(0,0);
+            
+            // Si visita una sección manualmente, contarla para progreso
+            visitedSteps.add(id);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const percent = Math.round((visitedSteps.size / totalSteps) * 100);
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            document.getElementById('progress-text').textContent = `${percent}%`;
+        }
+
+        // TABS LOGIC
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // REFLEXION LOGIC
+        function saveReflection(id) {
+            const text = document.getElementById(`reflexion${id}`).value;
+            if(text.length > 10) {
+                alert("¡Respuesta registrada con éxito!");
+                if(id === 1) completeStep(3, 4);
+                if(id === 2) completeStep(6, 7);
+            } else {
+                alert("Por favor, escribe una respuesta más completa.");
+            }
+        }
+
+        const words = ['DISEÑO', 'MECANICA', 'INDUSTRIA', 'PLANOS', 'PROTOTIPO'];
+const gridData = [
+    ['D','I','S','E','Ñ','O','K','R','M','A'], // DISEÑO (0-5)
+    ['X','Y','P','L','A','N','O','S','T','R'], // PLANOS (2-7)
+    ['I','N','D','U','S','T','R','I','A','Q'], // INDUSTRIA (0-8)
+    ['M','E','C','A','N','I','C','A','W','Z'], // MECANICA (0-7)
+    ['P','R','O','T','O','T','I','P','O','L'], // PROTOTIPO (0-8)
+    ['B','V','C','X','Z','A','S','D','F','G'], // Relleno
+    ['H','J','K','L','Ñ','P','O','I','U','Y'], // Relleno
+    ['Q','W','E','R','T','Y','U','I','O','P']  // Relleno
+];
+
+// Variable para rastrear qué palabras han sido marcadas
+let wordsFound = {
+    'DISEÑO': false,
+    'MECANICA': false,
+    'INDUSTRIA': false,
+    'PLANOS': false,
+    'PROTOTIPO': false
+};
+
+// Asegúrate de que initWordSearch use estas nuevas dimensiones
+function initWordSearch() {
+    const gridContainer = document.getElementById('wordSearchGrid');
+    const listContainer = document.getElementById('wordList');
+    
+    if(!gridContainer || !listContainer) return;
+
+    gridContainer.innerHTML = ''; 
+    listContainer.innerHTML = '';
+
+    // Renderizar lista de palabras a buscar
+    words.forEach(word => {
+        const tag = document.createElement('div');
+        tag.className = 'word-tag';
+        tag.id = `tag-${word}`;
+        tag.innerText = word;
+        tag.onclick = function() {
+            if(!wordsFound[word]) {
+                markWordFound(word);
+            }
+        };
+        listContainer.appendChild(tag);
+    });
+
+    // Renderizar el Grid de 10x8
+    gridData.forEach((row) => {
+        row.forEach((char) => {
+            const cell = document.createElement('div');
+            cell.className = 'ws-cell';
+            cell.innerText = char;
+            cell.onclick = function() {
+                this.classList.toggle('selected');
+            };
+            gridContainer.appendChild(cell);
+        });
+    });
+}
+
+function markWordFound(word) {
+    wordsFound[word] = true;
+    document.getElementById(`tag-${word}`).classList.add('found');
+    
+    // Verificar si TODAS las palabras han sido encontradas
+    const allFound = Object.values(wordsFound).every(status => status === true);
+    
+    if(allFound) {
+        // Efecto visual en el grid
+        document.querySelectorAll('.ws-cell.selected').forEach(c => {
+            c.classList.remove('selected');
+            c.classList.add('found');
+        });
+        
+        // Mostrar área final
+        document.getElementById('finalBtnArea').style.display = 'block';
+        visitedSteps.add(7);
+        updateProgress();
+    }
+}
+
+        // FINALIZAR MÓDULO
+        function finishModule() {
+            const storageKey = 'makerCourseState'; 
+            const savedState = localStorage.getItem(storageKey);
+            const currentModuleId = 4;
+            const nextModuleId = 5;
+
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                if (!state.completedModules.includes(currentModuleId)) state.completedModules.push(currentModuleId);
+                if (!state.unlockedModules.includes(nextModuleId)) state.unlockedModules.push(nextModuleId);
+                localStorage.setItem(storageKey, JSON.stringify(state));
+                
+                // Mostrar Animación
+                document.getElementById('congratsOverlay').style.display = 'flex';
+            } else {
+                alert("Error de sesión. Volviendo al inicio.");
+                window.location.href = 'index.html';
+            }
+        }
+
+        // INICIALIZAR
+        initWordSearch();
+        updateProgress();
+
+    </script>
+</body>
+</html>

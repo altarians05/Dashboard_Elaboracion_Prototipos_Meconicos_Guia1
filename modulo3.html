@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3: Reflexión Inicial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Paleta Institucional */
+            --sena-green: #39A900; 
+            --sena-blue: #00324D; 
+            --sena-orange: #FF6C00;
+            --bg-body: #F4F6F9; 
+            --bg-card: #FFFFFF; 
+            --text-gray: #59667a;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            --radius: 12px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-body); color: var(--sena-blue); line-height: 1.6; }
+        
+        /* HEADER */
+        header { background-color: var(--bg-card); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { text-decoration: none; color: var(--sena-blue); font-weight: bold; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .back-btn:hover { color: var(--sena-orange); }
+        
+        /* Título del Módulo Centrado */
+        .module-title { 
+            font-family: 'Montserrat', sans-serif; 
+            text-transform: uppercase; 
+            font-weight: 700; 
+            color: var(--sena-blue); 
+            font-size: 1.2rem; 
+            text-align: center; 
+            flex-grow: 1; 
+            letter-spacing: 1.7px; /* Requerimiento específico */
+        }
+        @media(max-width: 768px) { .module-title { display: none; } }
+
+        /* CONTENIDO */
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        
+        /* BANNER */
+        .banner-container { width: 100%; margin-bottom: 2rem; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: white; text-align: center; }
+        .banner-container img { width: 100%; max-height: 300px; object-fit: cover; }
+        
+        /* CARDS GENERALES */
+        .info-card { background: var(--bg-card); border-radius: var(--radius); padding: 3rem; box-shadow: var(--shadow); border-top: 5px solid var(--sena-green); margin-bottom: 2rem; }
+        .section-title { font-family: 'Montserrat'; color: var(--sena-green); font-size: 1.4rem; margin-bottom: 1.5rem; text-transform: uppercase; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        /* SECCIÓN 1: PRESENTACIÓN */
+        .presentation-content { display: grid; grid-template-columns: 1fr 220px; gap: 30px; align-items: center; }
+        .tecnobot-img { width: 130%; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        
+        .meta-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .meta-list li { background: #f8f9fa; padding: 12px 15px; border-radius: 8px; border-left: 4px solid var(--sena-orange); font-size: 0.9rem; }
+        .meta-list li strong { color: var(--sena-blue); display: block; margin-bottom: 4px; font-family: 'Montserrat'; }
+
+        /* SECCIÓN NARRATIVA (Estilo Chat) */
+        .narrative-block { display: flex; gap: 20px; margin-bottom: 30px; align-items: flex-start; }
+        .narrative-block.reverse { flex-direction: row-reverse; text-align: right; }
+        .character-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid var(--sena-green); flex-shrink: 0; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .dialogue-box { background: #e3f2fd; padding: 25px; border-radius: 0 20px 20px 20px; position: relative; font-size: 1rem; color: #333; flex-grow: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .narrative-block.reverse .dialogue-box { background: #fff3e0; border-radius: 20px 0 20px 20px; }
+        
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 15px; margin: 20px 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* PREGUNTAS REFLEXIVAS */
+        .question-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; margin-bottom: 15px; overflow: hidden; transition: all 0.3s; }
+        .question-box:hover { border-color: var(--sena-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .q-header { padding: 15px 20px; background: #f8f9fa; cursor: pointer; font-weight: bold; color: var(--sena-blue); display: flex; justify-content: space-between; align-items: center; }
+        .q-content { padding: 20px; display: none; color: var(--text-gray); border-top: 1px solid #eee; background: #fff; }
+        
+        /* ODS CARDS */
+        .ods-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .ods-card { position: relative; overflow: hidden; border-radius: 15px; cursor: pointer; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .ods-card:hover { transform: translateY(-5px); }
+        .ods-card img { width: 100%; height: auto; display: block; }
+        .ods-info { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 50, 77, 0.9); color: white; padding: 15px; transform: translateY(100%); transition: transform 0.3s; font-size: 0.85rem; }
+        .ods-card:hover .ods-info { transform: translateY(0); }
+
+        /* JUEGO MATCH (Emparejamiento) */
+        .game-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
+        .column { display: flex; flex-direction: column; gap: 15px; }
+        .match-item { padding: 15px; background: white; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; transition: all 0.2s; text-align: center; font-weight: bold; color: var(--text-gray); }
+        .match-item:hover { border-color: var(--sena-orange); background: #fff3e0; }
+        .match-item.selected { background: var(--sena-blue); color: white; border-color: var(--sena-blue); }
+        .match-item.matched { background: var(--sena-green); color: white; border-color: var(--sena-green); cursor: default; opacity: 0.7; }
+
+        /* BOTÓN FINAL */
+        .final-action { text-align: center; margin-top: 40px; display: none; /* Se muestra al ganar */ }
+        .btn-finish { background: var(--sena-green); color: white; border: none; padding: 15px 50px; font-size: 1.2rem; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(57, 169, 0, 0.3); transition: transform 0.2s; display: inline-flex; align-items: center; gap: 10px; }
+        .btn-finish:hover { transform: scale(1.05); background: #2e8b00; }
+
+        /* OVERLAY DE INSIGNIA (Animación Final) */
+        #badgeOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,50,77,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; text-align: center; color: white; }
+        .badge-anim { width: 300px; animation: badgePop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-bottom: 20px; filter: drop-shadow(0 0 30px rgba(255,215,0,0.5)); }
+        @keyframes badgePop { from { transform: scale(0) rotate(-180deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+        .congrats-text { font-family: 'Montserrat'; font-size: 3rem; margin-bottom: 10px; text-transform: uppercase; color: #FFD700; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .btn-return { background: white; color: var(--sena-blue); padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-top: 30px; display: inline-block; cursor: pointer; border: none; font-size: 1.1rem; }
+        .btn-return:hover { background: var(--sena-orange); color: white; transform: translateY(-3px); }
+
+        @media (max-width: 768px) {
+            .presentation-content { grid-template-columns: 1fr; text-align: center; }
+            .tecnobot-img { max-width: 180px; margin: 0 auto; }
+            .meta-list { grid-template-columns: 1fr; }
+            .narrative-block, .narrative-block.reverse { flex-direction: column; align-items: center; text-align: center; }
+            .dialogue-box { border-radius: 20px; }
+            .game-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="imagenes/Logos/sena.png" alt="Logo SENA" style="height: 50px; width: auto;">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Centro de Comando</a>
+        </div>
+        <div class="module-title">Módulo 3: Reflexión Inicial</div>
+        <img src="imagenes/Logos/tecnoacademia.jpeg" alt="Logo Tecnoacademia" style="height: 50px; width: auto;">
+    </header>
+
+    <div class="container">
+        
+        <div class="banner-container">
+            <img src="imagenes/Fondos/Titulos_Mesa de trabajo 1 copia.png" alt="Banner Reflexión Inicial">
+        </div>
+
+        <div class="info-card">
+            <div class="section-title"><i class="fas fa-info-circle"></i> Ficha de Misión</div>
+            <div class="presentation-content">
+                <div>
+                    <p style="margin-bottom: 20px;">Bienvenidos a este viaje por la historia de la innovación. Antes de crear, debemos inspirarnos en los grandes inventores. En este módulo analizaremos cómo la tecnología ha transformado nuestra sociedad y qué impacto queremos generar nosotros como Makers.</p>
+                    <ul class="meta-list">
+                        <li><strong><i class="fas fa-bullseye"></i> Actividad</strong>Los Inventos más importantes de la Historia</li>
+                        <li><strong><i class="fas fa-users"></i> Técnica Didáctica</strong>Mesa Redonda y Lluvia de Ideas</li>
+                        <li><strong><i class="fas fa-clock"></i> Duración</strong>4 Horas (2 Presenciales / 2 Desescolarizadas)</li>
+                        <li><strong><i class="fas fa-clipboard-check"></i> Evidencia</strong>Actividad de Match de Conceptos</li>
+                        <li><strong><i class="fas fa-laptop"></i> Recursos</strong>Proyector, Computador, Internet</li>
+                        <li><strong><i class="fas fa-layer-group"></i> Forma de Trabajo</strong>Individual, Presencial y Desescolarizada</li>
+                    </ul>
+                </div>
+                <div style="position: relative; text-align: center;">
+                    
+                    <img src="imagenes/Personajes/tecnoBot/para talleres_Mesa de trabajo 1.png" alt="TecnoBot Motivador" class="tecnobot-img">
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="section-title"><i class="fas fa-lightbulb"></i> Inspiración Maker</div>
+            
+            <div class="narrative-block">
+                <img src="imagenes/Personajes/Maker/Facilitador_Ciencias2.png" alt="Facilitador Ciencias" class="character-avatar">
+                <div class="dialogue-box">
+                    <strong>Facilitador de Ciencias dice:</strong><br>
+                    "¿Sabías que nuestra historia está marcada por innovaciones que cambiaron todo? La rueda, la imprenta, el internet... Conocer nuestro pasado nos inspira a crear un futuro brillante. ¿Estás listo para descubrir los inventos que revolucionaron la humanidad?"
+                </div>
+            </div>
+
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/qEca86dbzhk" title="Inventos que cambiaron el mundo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <div class="narrative-block reverse">
+                <img src="imagenes/Personajes/Maker/facilitador Nanotecnología.png" alt="Facilitador Nano" class="character-avatar">
+                <div class="dialogue-box">
+                    <strong>Facilitador de Nanotecnología dice:</strong><br>
+                    "¡Increíble video! Ahora es tu turno. Basándote en lo que viste y en la teoría de la decisión de utilidad, reflexiona sobre las siguientes preguntas. Recuerda socializarlas en la mesa redonda con tu equipo."
+                </div>
+            </div>
+
+            <h3 style="color: var(--sena-blue); margin: 20px 0;"><i class="fas fa-question-circle"></i> Preguntas de Reflexión</h3>
+            
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                <img src="imagenes/Personajes/TecnoBot/tecnobot rostro_Mesa de trabajo 1.png" alt="TecnoBot" style="width: 100px;">
+                <span style="font-size: 0.9rem; color: var(--text-gray);">Haz clic en cada pregunta para ver una guía de reflexión.</span>
+            </div>
+
+            <div class="question-box">
+                <div class="q-header" onclick="toggleQ(this)">¿Cuál crees que ha sido el invento más influyente en la historia? <i class="fas fa-chevron-down"></i></div>
+                <div class="q-content">Piensa en aquel invento sin el cual la sociedad actual colapsaría por completo (Ej: Electricidad, Internet, Rueda).</div>
+            </div>
+            <div class="question-box">
+                <div class="q-header" onclick="toggleQ(this)">¿Qué invento ha impulsado el mayor avance moderno? <i class="fas fa-chevron-down"></i></div>
+                <div class="q-content">Considera la velocidad de la información o la salud (Ej: Antibióticos, Microprocesador).</div>
+            </div>
+            <div class="question-box">
+                <div class="q-header" onclick="toggleQ(this)">¿Cómo sería el mundo sin tu invento elegido? <i class="fas fa-chevron-down"></i></div>
+                <div class="q-content">Imagina un día común sin esa tecnología. ¿Sería más lento? ¿Más peligroso? ¿Menos conectado?</div>
+            </div>
+            <div class="question-box">
+                <div class="q-header" onclick="toggleQ(this)">¿Qué invento te gustaría haber creado? <i class="fas fa-chevron-down"></i></div>
+                <div class="q-content">Conecta esto con tus pasiones personales. ¿Te gusta ayudar, explorar, comunicar?</div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="section-title"><i class="fas fa-globe-americas"></i> Impacto en los ODS</div>
+            <p>La ingeniería y el diseño tienen un impacto directo en los Objetivos de Desarrollo Sostenible. Pasa el mouse sobre cada tarjeta:</p>
+            
+            <div class="ods-grid">
+                <div class="ods-card">
+                    <img src="imagenes/ODS/ODS_9.png" alt="ODS 9">
+                    <div class="ods-info">
+                        <strong>Industria, Innovación e Infraestructura:</strong><br>
+                        Desarrollar infraestructuras resilientes y fomentar la innovación tecnológica es la base del movimiento Maker.
+                    </div>
+                </div>
+                <div class="ods-card">
+                    <img src="imagenes/ODS/ODS_11.png" alt="ODS 11">
+                    <div class="ods-info">
+                        <strong>Ciudades y Comunidades Sostenibles:</strong><br>
+                        Los prototipos pueden solucionar problemas urbanos como el transporte y la gestión de residuos.
+                    </div>
+                </div>
+                <div class="ods-card">
+                    <img src="imagenes/ODS/ODS_12.png" alt="ODS 12">
+                    <div class="ods-info">
+                        <strong>Producción y Consumo Responsables:</strong><br>
+                        Diseñar pensando en la vida útil y el reciclaje de materiales reduce la huella ecológica.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="section-title"><i class="fas fa-gamepad"></i> Reto de Conexión: Match de Conceptos</div>
+            <p>Selecciona un invento de la columna izquierda y conéctalo con su impacto en la columna derecha. ¡Completa los 4 pares para finalizar!</p>
+
+            <div class="game-container" id="matchGame">
+                </div>
+
+            <div class="final-action" id="finalBtnArea">
+                <h3 style="color: var(--sena-green); margin-bottom: 10px;">¡Excelente Conexión!</h3>
+                <p style="margin-bottom: 20px;">Has identificado correctamente los hitos tecnológicos.</p>
+                <button class="btn-finish" onclick="finishModule()">
+                    <i class="fas fa-star"></i> Finalizar Actividad y Guardar
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="badgeOverlay">
+        <h1 class="congrats-text">¡FELICITACIONES!</h1>
+        <img src="imagenes/Insignias/Insignias Mohs/01 - Insignias MOHS-Plata.png" alt="Insignia Plata" class="badge-anim">
+        <h2 style="font-family: 'Montserrat';">Has desbloqueado la Insignia de Plata</h2>
+        <p>Tu capacidad de reflexión histórica te convierte en un Maker Visionario.</p>
+        <button class="btn-return" onclick="returnToIndex()">
+            <i class="fas fa-arrow-left"></i> Volver al Centro de Comando
+        </button>
+    </div>
+
+    <script>
+        // 1. FUNCIONALIDAD ACORDEÓN
+        function toggleQ(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                icon.className = "fas fa-chevron-down";
+            } else {
+                content.style.display = "block";
+                icon.className = "fas fa-chevron-up";
+            }
+        }
+
+        // 2. JUEGO MATCH DE CONCEPTOS
+        const terms = [
+            { id: 1, text: "Máquina de Vapor", type: "term" },
+            { id: 2, text: "Internet", type: "term" },
+            { id: 3, text: "Bombilla Eléctrica", type: "term" },
+            { id: 4, text: "Imprenta", type: "term" }
+        ];
+        
+        const defs = [
+            { id: 1, text: "Impulsó la Revolución Industrial y el transporte masivo.", type: "def" },
+            { id: 2, text: "Conectó al mundo permitiendo el acceso global a la información.", type: "def" },
+            { id: 3, text: "Extendió la actividad humana más allá de la luz solar.", type: "def" },
+            { id: 4, text: "Democratizó el conocimiento a través de los libros.", type: "def" }
+        ];
+
+        // Mezclar definiciones
+        defs.sort(() => Math.random() - 0.5);
+
+        const gameContainer = document.getElementById('matchGame');
+        let selectedTerm = null;
+        let matchesFound = 0;
+
+        function renderGame() {
+            let col1 = document.createElement('div');
+            col1.className = 'column';
+            terms.forEach(t => {
+                let div = document.createElement('div');
+                div.className = 'match-item';
+                div.textContent = t.text;
+                div.dataset.id = t.id;
+                div.dataset.type = 'term';
+                div.onclick = () => selectItem(div);
+                col1.appendChild(div);
+            });
+
+            let col2 = document.createElement('div');
+            col2.className = 'column';
+            defs.forEach(d => {
+                let div = document.createElement('div');
+                div.className = 'match-item';
+                div.textContent = d.text;
+                div.dataset.id = d.id;
+                div.dataset.type = 'def';
+                div.onclick = () => selectItem(div);
+                col2.appendChild(div);
+            });
+
+            gameContainer.appendChild(col1);
+            gameContainer.appendChild(col2);
+        }
+
+        function selectItem(element) {
+            if (element.classList.contains('matched')) return;
+
+            // Si seleccionamos un término
+            if (element.dataset.type === 'term') {
+                if (selectedTerm) selectedTerm.classList.remove('selected');
+                selectedTerm = element;
+                element.classList.add('selected');
+            } 
+            // Si seleccionamos una definición y ya hay término seleccionado
+            else if (element.dataset.type === 'def' && selectedTerm) {
+                if (selectedTerm.dataset.id === element.dataset.id) {
+                    // Match correcto
+                    selectedTerm.classList.remove('selected');
+                    selectedTerm.classList.add('matched');
+                    element.classList.add('matched');
+                    selectedTerm = null;
+                    matchesFound++;
+                    if(matchesFound === 4) {
+                        document.getElementById('finalBtnArea').style.display = 'block';
+                    }
+                } else {
+                    // Error visual
+                    element.style.borderColor = 'red';
+                    setTimeout(() => element.style.borderColor = '#ddd', 500);
+                }
+            }
+        }
+
+        renderGame();
+
+        // 3. LÓGICA DE FINALIZACIÓN
+        function finishModule() {
+            const storageKey = 'makerCourseState'; 
+            const savedState = localStorage.getItem(storageKey);
+            
+            // ID del Módulo actual (3) y el siguiente a desbloquear (4)
+            const currentModuleId = 3;
+            const nextModuleId = 4;
+
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                
+                // 1. Marcar como completado
+                if (!state.completedModules.includes(currentModuleId)) {
+                    state.completedModules.push(currentModuleId);
+                }
+
+                // 2. Desbloquear siguiente
+                if (!state.unlockedModules.includes(nextModuleId)) {
+                    state.unlockedModules.push(nextModuleId);
+                }
+
+                // 3. Guardar
+                localStorage.setItem(storageKey, JSON.stringify(state));
+                
+                // 4. Mostrar Animación
+                document.getElementById('badgeOverlay').style.display = 'flex';
+                
+            } else {
+                // Fallback para pruebas locales
+                alert("Sesión no detectada. Redirigiendo al inicio.");
+                window.location.href = 'index.html';
+            }
+        }
+
+        function returnToIndex() {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>

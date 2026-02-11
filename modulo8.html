@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 8: Glosario Técnico - TecnoAcademia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --sena-green: #39A900; 
+            --sena-blue: #00324D; 
+            --sena-orange: #FF6C00; 
+            --bg-body: #F4F6F9; 
+            --bg-card: #FFFFFF; 
+            --text-gray: #59667a; 
+            --shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            --radius: 12px; 
+            --sidebar-width: 320px; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-body); color: var(--sena-blue); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background-color: var(--bg-card); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 100; position: sticky; top: 0; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+
+.module-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--sena-blue);
+    text-transform: uppercase; /* Convierte a mayúsculas */
+    letter-spacing: 1.7px;      /* Espacio entre letras de 1.7 */
+    flex: 1;                    /* Ayuda a centrar o distribuir el espacio */
+    text-align: center;         /* Centra el texto entre los logos */
+}
+
+        .back-btn { text-decoration: none; color: var(--sena-blue); font-weight: bold; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .back-btn:hover { color: var(--sena-orange); }
+
+        .main-layout { display: flex; flex: 1; max-width: 1400px; margin: 2rem auto; gap: 2rem; width: 100%; padding: 0 20px; align-items: stretch; }
+
+        .sidebar { 
+            width: var(--sidebar-width); 
+            background: var(--bg-card); 
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow); 
+            padding: 1.5rem; 
+            display: flex; 
+            flex-direction: column; 
+            height: calc(100vh - 100px); /* Ajuste para scroll interno */
+            position: sticky;
+            top: 100px;
+        }
+        .sidebar h3 { font-family: 'Montserrat'; color: var(--sena-green); margin-bottom: 1rem; border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 1.1rem; }
+        
+        .search-container { margin-bottom: 1rem; }
+        .search-box { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; outline: none; }
+        .search-box:focus { border-color: var(--sena-green); }
+
+        .menu-list { flex: 1; overflow-y: auto; padding-right: 5px; }
+        /* Scrollbar estilizado */
+        .menu-list::-webkit-scrollbar { width: 6px; }
+        .menu-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+        .menu-item { 
+            display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 6px; 
+            border-radius: 8px; cursor: pointer; transition: all 0.3s; color: var(--text-gray); 
+            font-weight: 500; border: 1px solid transparent; font-size: 0.9rem;
+        }
+        .menu-item i { width: 25px; text-align: center; color: var(--sena-blue); }
+        .menu-item:hover { background: #f0fdf4; color: var(--sena-green); }
+        .menu-item:hover i { color: var(--sena-green); }
+        .menu-item.active { background: var(--sena-green); color: white; box-shadow: 0 4px 10px rgba(57, 169, 0, 0.3); border-color: var(--sena-green); }
+        .menu-item.active i { color: white; }
+
+        .content-area { flex: 1; background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2.5rem; display: flex; flex-direction: column; min-height: 600px; }
+        
+        #definition-display { animation: fadeIn 0.4s ease-out; width: 100%; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .term-title { font-family: 'Montserrat'; color: var(--sena-blue); font-size: 2.2rem; margin-bottom: 1rem; border-bottom: 3px solid var(--sena-orange); display: inline-block; padding-bottom: 5px; }
+        
+        .def-layout { display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start; }
+        .def-text-side p { font-size: 1.1rem; color: #444; margin-bottom: 15px; line-height: 1.7; text-align: justify;}
+
+        /* ESTILOS DE TARJETAS */
+        .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .info-card { padding: 15px; border-radius: 8px; font-size: 0.9rem; border-left: 5px solid; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .info-card h4 { margin-bottom: 5px; display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; }
+        
+        .card-tip { background: #fff8e1; border-color: #ffc107; color: #856404; }
+        .card-challenge { background: #e3f2fd; border-color: #2196f3; color: #0d47a1; }
+        .card-tech { background: #e8f5e9; border-color: #4caf50; color: #1b5e20; }
+        .card-real { background: #f3e5f5; border-color: #9c27b0; color: #4a148c; }
+
+        .def-image-side img { width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 5px solid white; margin-bottom: 15px; }
+        .image-caption { font-size: 0.8rem; color: #777; font-style: italic; text-align: center; }
+
+        .sidebar-footer { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; }
+        .progress-bar-bg { background: #eee; height: 8px; border-radius: 10px; margin: 15px 0; }
+        .progress-bar-fill { background: var(--sena-orange); height: 100%; width: 0%; border-radius: 10px; transition: 0.5s; }
+        
+        .finish-btn { width: 100%; padding: 12px; background: #ccc; color: white; border: none; border-radius: 8px; cursor: not-allowed; font-weight: bold; transition: 0.3s; }
+        .finish-btn.ready { background: var(--sena-green); cursor: pointer; box-shadow: 0 4px 15px rgba(57, 169, 0, 0.4); }
+        .finish-btn.ready:hover { transform: translateY(-2px); }
+
+        /* Estado inicial vacío */
+        .empty-state { text-align: center; color: #999; margin-top: 50px; }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; color: #ddd; }
+
+        @media (max-width: 992px) { 
+            .main-layout { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; }
+            .def-layout { grid-template-columns: 1fr; } 
+            .cards-grid { grid-template-columns: 1fr; } 
+        }
+
+/* Animación de pulso para el trofeo */
+@keyframes trophyBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+#congrats-content i {
+    animation: trophyBounce 2s infinite ease-in-out;
+}
+    </style>
+</head>
+<body>
+
+    <header>
+    <div class="header-left">
+        <img src="imagenes/Logos/sena.png" alt="SENA Logo" style="height: 50px;">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Centro de Comando</a>
+    </div>
+
+    <div class="module-title">Módulo 8: Glosario</div>
+
+    <img src="imagenes/Logos/tecnoacademia.jpeg" alt="TecnoAcademia Logo" style="height: 50px;">
+</header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <h3><i class="fas fa-book-open"></i> Glosario de Ingeniería</h3>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Buscar término..." onkeyup="filterMenu(this.value)">
+            </div>
+            <div class="menu-list" id="menu-list">
+                </div>
+            <div class="sidebar-footer">
+                <small>Progreso de Lectura: <span id="count">0</span>/11</small>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+                <button id="btn-finish" class="finish-btn" onclick="finishModule()">Finalizar Glosario</button>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div id="definition-display">
+                <div class="empty-state">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <h2>Selecciona un término</h2>
+                    <p>Haz clic en el menú de la izquierda para ver las definiciones técnicas y ejemplos.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<div id="congrats-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; display: none; flex-direction: column; opacity: 0; transition: opacity 0.5s ease;">
+    <div style="background: white; padding: 3rem; border-radius: 20px; text-align: center; max-width: 500px; transform: scale(0.7); transition: transform 0.5s ease;" id="congrats-content">
+        <i class="fas fa-trophy" style="font-size: 5rem; color: #FFD700; margin-bottom: 1rem;"></i>
+        <h1 style="font-family: 'Montserrat'; color: var(--sena-blue); margin-bottom: 1rem;">¡Excelente Trabajo!</h1>
+        <p style="font-size: 1.2rem; color: var(--text-gray); margin-bottom: 2rem;">Has completado el Glosario Técnico de Ingeniería con éxito.</p>
+        <button onclick="window.location.href='index.html'" style="padding: 15px 30px; background: var(--sena-green); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(57,169,0,0.3);">
+            <i class="fas fa-home"></i> Continuar al Inicio
+        </button>
+    </div>
+</div>
+
+    <script>
+        // DATOS DEL GLOSARIO ACTUALIZADOS (Nuevos Términos)
+        const glossaryData = [
+            { 
+                term: "Boceto", 
+                icon: "fa-pencil-alt",
+                def: "Un dibujo o representación inicial y básica de un diseño o idea, generalmente realizado a mano alzada o con software de diseño. Su objetivo principal es visualizar la apariencia y función básica del prototipo sin preocuparse por la precisión exacta o los detalles finales. Es la forma más rápida de comunicar una idea técnica.", 
+                img: "https://images.unsplash.com/photo-1513187219967-0c7f1a547702?auto=format&fit=crop&w=600&q=80",
+                caption: "Bocetos de diseño industrial a mano alzada.",
+                tip: "Usa trazos suaves y rápidos; no busques la perfección, busca la claridad.",
+                challenge: "Dibuja 3 bocetos diferentes de una silla en menos de 1 minuto.",
+                tech: "Los bocetos suelen ser la base para el modelado 3D posterior.",
+                real: "Los diseñadores de autos hacen cientos de bocetos antes de elegir el diseño final."
+            },
+            { 
+                term: "Brainstorming", 
+                icon: "fa-lightbulb",
+                def: "Una técnica de generación de ideas en la que se fomenta la libre asociación de conceptos y la creatividad. Permite explorar diferentes enfoques y soluciones para un diseño de prototipo sin juzgar las ideas inicialmente. Es fundamental para la innovación y la resolución de problemas complejos en equipo.", 
+                img: "https://images.unsplash.com/photo-1531498860502-7c67cf02f657?auto=format&fit=crop&w=600&q=80",
+                caption: "Equipo realizando una lluvia de ideas con notas adhesivas.",
+                tip: "En esta etapa, ninguna idea es mala. ¡La cantidad es más importante que la calidad!",
+                challenge: "Piensa en 5 usos diferentes para un clip de papel que no sea sujetar hojas.",
+                tech: "Existen variantes como el 'Brainwriting' donde las ideas se escriben en silencio.",
+                real: "Empresas como IDEO usan brainstorming diario para diseñar nuevos productos."
+            },
+            { 
+                term: "Diseño conceptual", 
+                icon: "fa-brain",
+                def: "La etapa inicial del proceso de diseño en la que se generan ideas y conceptos abstractos para un producto o sistema. Aquí se define 'qué' va a hacer el producto y 'cómo' funcionará a grandes rasgos, sin preocuparse aún por detalles específicos de implementación como medidas exactas o materiales finales.", 
+                img: "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&w=600&q=80",
+                caption: "Desarrollo de conceptos iniciales de ingeniería.",
+                tip: "Enfócate en la función principal del objeto antes que en su forma estética.",
+                challenge: "Describe el concepto de una bicicleta que no tenga ruedas redondas.",
+                tech: "Se suelen usar mapas mentales y diagramas funcionales en esta fase.",
+                real: "El diseño conceptual de un avión define si tendrá alas altas o bajas antes de dibujarlas."
+            },
+            { 
+                term: "Diseño detallado", 
+                icon: "fa-drafting-compass",
+                def: "La fase del proceso de diseño donde se elaboran los detalles específicos de construcción y funcionamiento. Incluye la creación de planos técnicos precisos, especificaciones de materiales, tolerancias y análisis de ingeniería. Es el paso previo a la fabricación, donde se asegura que todas las piezas encajen perfectamente.", 
+                img: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80",
+                caption: "Ingeniero revisando planos detallados en CAD.",
+                tip: "Revisa cada medida dos veces; un error aquí puede costar mucho dinero en fabricación.",
+                challenge: "Identifica qué material y grosor usarías para las patas de una mesa escolar.",
+                tech: "Utiliza software CAD para simular ensamblajes y detectar interferencias.",
+                real: "En el diseño detallado de un celular se define hasta el tipo de pegamento interno."
+            },
+            { 
+                term: "Ingeniería", 
+                icon: "fa-cogs",
+                def: "La aplicación de principios científicos, matemáticos y experiencia empírica para diseñar, construir y mantener estructuras, máquinas, sistemas y procesos. Busca soluciones eficientes y seguras a problemas técnicos, optimizando recursos como materiales, energía y tiempo.", 
+                img: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=600&q=80",
+                caption: "Ingeniería mecánica aplicada en maquinaria industrial.",
+                tip: "La ingeniería no es solo calcular, es resolver problemas con ingenio.",
+                challenge: "¿Cómo podrías levantar un objeto pesado usando menos fuerza?",
+                tech: "Se basa en leyes físicas como la termodinámica y la mecánica de materiales.",
+                real: "La ingeniería civil permite que rascacielos de 800 metros no se caigan con el viento."
+            },
+            { 
+                term: "Maquetación", 
+                icon: "fa-shapes",
+                def: "La creación de un modelo a escala reducida o representación física simple del prototipo. Se utilizan materiales de fácil manipulación como cartón, papel, espuma o madera balsa para visualizar la forma, volumen y dimensiones de manera tangible antes de invertir en materiales costosos.", 
+                img: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=600&q=80",
+                caption: "Maqueta arquitectónica en cartón y madera.",
+                tip: "Usa materiales reciclables para tus primeras maquetas de estudio.",
+                challenge: "Construye una maqueta rápida de tu celular usando cartón corrugado.",
+                tech: "Las maquetas ayudan a entender la ergonomía y el tamaño real del objeto.",
+                real: "Los arquitectos siempre hacen maquetas para ver cómo la luz entra en los edificios."
+            },
+            { 
+                term: "Planos técnicos", 
+                icon: "fa-ruler-combined",
+                def: "Representaciones gráficas detalladas y dimensionadas del diseño del prototipo. Incluyen vistas ortográficas (planta, alzado, perfil), secciones transversales, detalles de montaje y todas las especificaciones técnicas necesarias para que un fabricante pueda producir la pieza sin errores.", 
+                img: "https://images.unsplash.com/photo-1595844730298-b9605a8f2dc3?auto=format&fit=crop&w=600&q=80",
+                caption: "Plano técnico con cotas y especificaciones.",
+                tip: "Un buen plano debe poder ser entendido por cualquier ingeniero en el mundo.",
+                challenge: "Dibuja las 3 vistas principales (frente, arriba, lado) de una caja de zapatos.",
+                tech: "Siguen normas internacionales estandarizadas como ISO o ANSI.",
+                real: "Sin planos técnicos precisos, las piezas de un motor no encajarían jamás."
+            },
+            { 
+                term: "Prototipo", 
+                icon: "fa-cube",
+                def: "Un modelo inicial, parcial o completo, de un producto o sistema que se construye para probar conceptos, validar diseños y realizar pruebas preliminares antes de la producción en masa. Permite detectar fallas y oportunidades de mejora en el mundo físico.", 
+                img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80",
+                caption: "Prototipo funcional de un robot.",
+                tip: "Falla rápido y barato con prototipos simples para tener éxito con el producto final.",
+                challenge: "Imagina un prototipo de una botella que no se derrame. ¿Cómo lo probarías?",
+                tech: "Pueden ser de 'baja fidelidad' (cartón) o 'alta fidelidad' (impresión 3D funcional).",
+                real: "Dyson hizo más de 5,000 prototipos antes de lanzar su aspiradora ciclónica."
+            },
+            { 
+                term: "Prueba de concepto", 
+                icon: "fa-flask",
+                def: "Un tipo de prototipo experimental diseñado específicamente para demostrar la viabilidad técnica o funcional de una idea o tecnología (PoC). No busca ser bonito ni final, sino responder a la pregunta: '¿Es esto técnicamente posible?'.", 
+                img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80",
+                caption: "Prueba experimental en laboratorio.",
+                tip: "Concéntrate solo en la función crítica que quieres probar, olvida la estética.",
+                challenge: "Diseña una prueba para ver si un motor tiene fuerza para levantar 1kg.",
+                tech: "Es crucial para reducir riesgos antes de invertir en desarrollo completo.",
+                real: "Antes de los aviones, se hicieron pruebas de concepto solo para ver si las alas generaban sustentación."
+            },
+            { 
+                term: "Storyboard", 
+                icon: "fa-images",
+                def: "Una serie de bocetos o dibujos secuenciales (como un cómic) que representan la narrativa visual de cómo un usuario utilizará o interactuará con el prototipo. Es una herramienta poderosa para comprender el flujo de uso, la experiencia del usuario (UX) y el contexto de funcionamiento.", 
+                img: "https://images.unsplash.com/photo-1620336655055-088d06e36bf0?auto=format&fit=crop&w=600&q=80",
+                caption: "Storyboard mostrando la interacción de usuario.",
+                tip: "Dibuja al usuario en cada cuadro, no solo al producto.",
+                challenge: "Crea un storyboard de 4 cuadros sobre cómo usar una máquina de café.",
+                tech: "Ayuda a identificar pasos innecesarios o confusos en el uso del producto.",
+                real: "En diseño de apps y productos físicos, el storyboard previene errores de lógica de uso."
+            },
+            { 
+                term: "Validación", 
+                icon: "fa-check-circle",
+                def: "El proceso de confirmar que el diseño o prototipo cumple con los requisitos y expectativas establecidos inicialmente. Se realiza a través de pruebas, análisis de datos y evaluación de desempeño en condiciones reales o simuladas para asegurar que el producto resuelve el problema correctamente.", 
+                img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80",
+                caption: "Lista de chequeo y pruebas de calidad.",
+                tip: "La validación debe hacerse contra los objetivos iniciales, no contra opiniones personales.",
+                challenge: "¿Cómo validarías que una silla escolar es resistente y cómoda?",
+                tech: "Incluye pruebas de resistencia, durabilidad, usabilidad y seguridad.",
+                real: "Los juguetes deben pasar estrictas validaciones de seguridad antes de venderse."
+            }
+        ];
+
+        // LOGICA DEL SISTEMA (IDÉNTICA AL MODULO ANTERIOR)
+        const viewed = new Set();
+        const menuContainer = document.getElementById('menu-list');
+        const displayArea = document.getElementById('definition-display');
+        const countSpan = document.getElementById('count');
+        const progressFill = document.getElementById('progress-fill');
+        const finishBtn = document.getElementById('btn-finish');
+
+        function renderMenu(filter = "") {
+            menuContainer.innerHTML = "";
+            glossaryData.forEach((item, index) => {
+                if (item.term.toLowerCase().includes(filter.toLowerCase())) {
+                    const div = document.createElement('div');
+                    div.className = `menu-item ${viewed.has(index) ? 'viewed' : ''}`;
+                    div.innerHTML = `<i class="fas ${item.icon}"></i> ${item.term}`;
+                    if (viewed.has(index)) div.style.color = "var(--sena-green)";
+                    
+                    div.onclick = () => showDefinition(index, div);
+                    menuContainer.appendChild(div);
+                }
+            });
+        }
+
+        function showDefinition(index, element) {
+            const data = glossaryData[index];
+            
+            // Marcar como visto
+            viewed.add(index);
+            updateProgress();
+            
+            // Actualizar estilo del menú
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+            element.style.color = "white"; // Force white text on active
+
+            // Renderizar contenido
+            displayArea.innerHTML = `
+                <h2 class="term-title">${data.term}</h2>
+                <div class="def-layout">
+                    <div class="def-text-side">
+                        <p>${data.def}</p>
+                        
+                        <div class="cards-grid">
+                            <div class="info-card card-tip">
+                                <h4><i class="fas fa-lightbulb"></i> Tip Maker</h4>
+                                ${data.tip}
+                            </div>
+                            <div class="info-card card-challenge">
+                                <h4><i class="fas fa-rocket"></i> Reto Rápido</h4>
+                                ${data.challenge}
+                            </div>
+                            <div class="info-card card-tech">
+                                <h4><i class="fas fa-cog"></i> Dato Técnico</h4>
+                                ${data.tech}
+                            </div>
+                            <div class="info-card card-real">
+                                <h4><i class="fas fa-globe-americas"></i> En la Vida Real</h4>
+                                ${data.real}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="def-image-side">
+                        <img src="${data.img}" alt="${data.term}">
+                        <p class="image-caption">${data.caption}</p>
+                    </div>
+                </div>
+            `;
+
+            // Reiniciar animación
+            displayArea.style.animation = 'none';
+            displayArea.offsetHeight; /* trigger reflow */
+            displayArea.style.animation = 'fadeIn 0.4s ease-out';
+        }
+
+        function updateProgress() {
+            const total = glossaryData.length;
+            const current = viewed.size;
+            
+            countSpan.innerText = current;
+            const percentage = (current / total) * 100;
+            progressFill.style.width = percentage + "%";
+
+            if (current === total) {
+                finishBtn.classList.add('ready');
+                finishBtn.removeAttribute('disabled');
+            }
+        }
+
+        function filterMenu(value) {
+            renderMenu(value);
+        }
+
+        function finishModule() {
+    // Verificamos si ya vio todos los términos
+    if (viewed.size === glossaryData.length) {
+        const storageKey = 'makerCourseState'; 
+        const savedState = localStorage.getItem(storageKey);
+        
+        // Lógica de guardado en LocalStorage
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            if (!state.completedModules.includes(8)) {
+                state.completedModules.push(8);
+            }
+            localStorage.setItem(storageKey, JSON.stringify(state));
+        }
+        
+        // --- AQUÍ ESTÁ EL CAMBIO PARA LA ANIMACIÓN ---
+        const modal = document.getElementById('congrats-modal');
+        const content = document.getElementById('congrats-content');
+        
+        // Mostramos el contenedor (está oculto por defecto con display: none)
+        modal.style.display = 'flex';
+        
+        // Usamos un pequeño delay para que el navegador registre el cambio de display
+        // y pueda ejecutar la transición de opacidad y escala
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            content.style.transform = 'scale(1)';
+        }, 50);
+        
+        // Eliminamos el window.location de aquí para que no se cierre solo
+    } else {
+        // Opcional: un aviso por si intentan dar clic antes de terminar
+        alert("Aún no has leído todos los términos del glosario.");
+    }
+}
+
+        // Inicializar
+        renderMenu();
+    </script>
+
+</body>
+</html>
